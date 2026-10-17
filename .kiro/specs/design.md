@@ -2,43 +2,42 @@
 
 ## 1. System Architecture
 The application is a client-side Single Page Application (SPA) built purely with vanilla web standards:
-- **`index.html`**: Semantic document structure, meta tags, and accessibility markup.
-- **`style.css`**: Design tokens (CSS custom properties), dark-mode-first aesthetic, glassmorphic card design, and micro-animations.
-- **`app.js`**: Core state management, DOM event handling, and localStorage synchronization.
+- **`index.html`**: Semantic document structure, meta tags, and accessibility markup (`role="tablist"`, `role="radiogroup"`, `aria-live`).
+- **`style.css`**: Design tokens for Light and Dark themes, responsive layout (Desktop persistent sidebar, mobile touch header), WCAG AA focus rings, and prefers-reduced-motion query.
+- **`app.js`**: Decoupled architecture with a pure `Core` engine (unit-testable in Node.js) and a reactive browser DOM controller with `localStorage` persistence and theme synchronization.
+- **`test/app.test.js`**: Built-in automated regression test suite using Node.js `node:test` and `node:assert/strict`.
 
 ---
 
 ## 2. Component Structure
 
 ```text
-+---------------------------------------------------+
-|               .todo-app-container                 |
-|                                                   |
-|  [ Header: App Title, Subtitle & Badge ]          |
-|                                                   |
-|  [ Form: Input Field + "Add Task" Button ]        |
-|                                                   |
-|  [ Filters & Stats Bar: Count, Filter Tabs ]      |
-|                                                   |
-|  [ List: <ul> .todo-list ]                         |
-|    +-------------------------------------------+  |
-|    | [ ] Task text                       [ X ] |  |
-|    | [/] Completed task text             [ X ] |  |
-|    +-------------------------------------------+  |
-|                                                   |
-|  [ Empty State Placeholder (when no items) ]      |
-+---------------------------------------------------+
++-----------------------------------------------------------------------+
+| .app-shell                                                            |
+|                                                                       |
+|  [ Aside: .sidebar ]                 [ Main: .workspace ]             |
+|   +--------------------------+        +-----------------------------+ |
+|   | Brand: TaskMaster        |        | Workspace Header            | |
+|   | Nav: All, Active, Done   |        |   Page Title & Subtitle     | |
+|   |                          |        |   Item Counter Badge        | |
+|   | [ Theme Radio Controls ] |        | Form: Input + Add Button    | |
+|   | (Light / Auto / Dark)    |        | Filter Hint Banner          | |
+|   +--------------------------+        | List: <ul> .todo-list       | |
+|                                       |   [ ] Task text       [ X ] | |
+|                                       | Empty State (Context-Aware) | |
+|                                       | Clear Completed Action      | |
+|                                       +-----------------------------+ |
++-----------------------------------------------------------------------+
 ```
 
-### HTML Elements & Classes
-- `#todo-form`: Container form element for input and submission.
-- `#todo-input`: Accessible text input element with `maxlength="200"`.
+### HTML Elements & Accessibility Tree
+- `.sidebar`: Persistent navigation on desktop (>1024px); adapts to compact touch header on mobile (<=640px).
+- `.theme-switch-group`: Radiogroup toggling Light, System (OS preference), and Dark modes.
+- `#todo-form`: Clean input form with visually hidden `<label>` (`.sr-only`) and dynamic validation feedback.
 - `#todo-list`: Unordered list element (`<ul role="list">`) displaying items.
-- `.todo-item`: Individual task item wrapper containing:
-  - `.todo-checkbox`: Custom toggle button or checkbox input.
-  - `.todo-text`: The label containing the task description.
-  - `.delete-btn`: Action button to delete the task.
-- `#todo-stats`: Summary showing active items remaining.
+- `.todo-item`: Accessible row with an accessible `<input type="checkbox">` wrapped in `<label>`, and an independent delete `<button>`.
+- `#filter-hint`: Non-disruptive feedback banner when tasks are added in Completed filter view.
+- `#empty-state`: Context-aware empty state with dynamic headings for All, Active, and Completed filters.
 
 ---
 

@@ -1,48 +1,93 @@
 /* ==========================================================================
-   Design Tokens
+   Design Tokens & Themes
    ========================================================================== */
-:root {
+
+/* Dark Theme Tokens (Default) */
+:root,
+:root[data-theme="dark"] {
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-  /* Surfaces — neutral charcoal & slate */
+  /* Surfaces */
   --bg-app: #0e1116;
   --bg-sidebar: #131720;
   --bg-input: #1a1f2a;
   --bg-input-focus: #1d232f;
-  --bg-hover: rgba(255, 255, 255, 0.035);
-  --bg-active: rgba(94, 106, 210, 0.10);
+  --bg-hover: rgba(255, 255, 255, 0.04);
+  --bg-active: rgba(94, 106, 210, 0.12);
+  --bg-hint: rgba(94, 106, 210, 0.08);
 
   /* Borders */
-  --border: rgba(255, 255, 255, 0.06);
-  --border-strong: rgba(255, 255, 255, 0.10);
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
 
-  /* Text */
+  /* Typography */
   --text-primary: #e6edf3;
   --text-secondary: #9ba3af;
   --text-tertiary: #6b7280;
-  --text-strike: #5b6470;
+  --text-strike: #535c6a;
 
-  /* Accent — desaturated indigo */
-  --accent: #5e6ad2;
-  --accent-hover: #4f5ab5;
-  --accent-soft: rgba(94, 106, 210, 0.10);
-  --accent-border: rgba(94, 106, 210, 0.35);
+  /* Accent */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --accent-border: rgba(99, 102, 241, 0.4);
 
   /* Semantic */
-  --success: #3fb950;
-  --danger: #f85149;
-  --danger-soft: rgba(248, 81, 73, 0.10);
+  --success: #10b981;
+  --danger: #ef4444;
+  --danger-soft: rgba(239, 68, 68, 0.10);
 
   /* Radii */
   --radius: 8px;
   --radius-sm: 6px;
+  --radius-full: 9999px;
+
+  /* Focus Ring */
+  --focus-ring: 2px solid #818cf8;
+  --focus-offset: 2px;
 
   /* Motion */
   --transition: 0.15s ease;
 }
 
+/* Light Theme Tokens */
+:root[data-theme="light"] {
+  /* Surfaces */
+  --bg-app: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-input: #ffffff;
+  --bg-input-focus: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.035);
+  --bg-active: rgba(79, 70, 229, 0.08);
+  --bg-hint: rgba(79, 70, 229, 0.06);
+
+  /* Borders */
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Typography */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-strike: #94a3b8;
+
+  /* Accent */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: rgba(79, 70, 229, 0.08);
+  --accent-border: rgba(79, 70, 229, 0.45);
+
+  /* Semantic */
+  --success: #059669;
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+
+  /* Focus Ring */
+  --focus-ring: 2px solid #4f46e5;
+}
+
 /* ==========================================================================
-   Reset & Base
+   Reset & Accessibility Base
    ========================================================================== */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -63,10 +108,24 @@ body {
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+/* Visually Hidden Helper (Accessible to Screen Readers) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 /* ==========================================================================
-   App Shell
+   App Layout Shell
    ========================================================================== */
 .app-shell {
   display: flex;
@@ -79,20 +138,27 @@ body {
    Sidebar
    ========================================================================== */
 .sidebar {
-  width: 248px;
+  width: 240px;
   flex-shrink: 0;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  padding: 22px 14px;
+  justify-content: space-between;
+  padding: 22px 14px 18px;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-brand {
   display: flex;
   align-items: center;
   gap: 9px;
-  padding: 2px 10px 24px;
+  padding: 2px 10px 22px;
 }
 
 .brand-icon {
@@ -118,7 +184,7 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 7px 10px;
+  padding: 8px 10px;
   background: transparent;
   border: none;
   border-radius: var(--radius-sm);
@@ -127,7 +193,7 @@ body {
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background var(--transition), color var(--transition);
+  transition: background-color var(--transition), color var(--transition);
   text-align: left;
 }
 
@@ -139,6 +205,7 @@ body {
 .nav-item.active {
   background: var(--accent-soft);
   color: var(--text-primary);
+  font-weight: 600;
 }
 
 .nav-label {
@@ -158,6 +225,61 @@ body {
 
 .nav-item.active .nav-count {
   color: var(--accent);
+  font-weight: 600;
+}
+
+/* Sidebar Theme Switcher Footer */
+.sidebar-footer {
+  padding: 14px 6px 4px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-label {
+  display: block;
+  font-size: 0.725rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.theme-switch-group {
+  display: flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+
+.theme-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 4px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.theme-btn:hover {
+  color: var(--text-primary);
+}
+
+.theme-btn.active {
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================================================
@@ -171,14 +293,14 @@ body {
 }
 
 .workspace-inner {
-  max-width: 800px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 48px 48px 32px;
+  padding: 44px 36px 36px;
 }
 
-/* Workspace Header */
+/* Header */
 .workspace-header {
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 
 .page-title {
@@ -186,7 +308,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .header-meta {
@@ -214,10 +336,10 @@ body {
 }
 
 /* ==========================================================================
-   Task Form
+   Task Input Form
    ========================================================================== */
 .todo-form {
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .input-group {
@@ -235,7 +357,7 @@ body {
   color: var(--text-primary);
   font-family: inherit;
   font-size: 0.875rem;
-  transition: border-color var(--transition), background var(--transition);
+  transition: border-color var(--transition), background-color var(--transition);
   outline: none;
 }
 
@@ -246,6 +368,12 @@ body {
 .todo-input:focus {
   border-color: var(--accent-border);
   background: var(--bg-input-focus);
+}
+
+.form-error {
+  margin-top: 6px;
+  font-size: 0.775rem;
+  color: var(--danger);
 }
 
 .btn {
@@ -260,7 +388,7 @@ body {
   border-radius: var(--radius);
   border: none;
   cursor: pointer;
-  transition: background var(--transition);
+  transition: background-color var(--transition);
   white-space: nowrap;
 }
 
@@ -274,11 +402,47 @@ body {
 }
 
 .btn-primary:active {
-  background: #43509f;
+  transform: translateY(1px);
 }
 
 .btn-icon {
   flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Filter Context Hint Banner
+   ========================================================================== */
+.filter-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-hint);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  margin-bottom: 16px;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.hint-action {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.hint-action:hover {
+  color: var(--accent-hover);
 }
 
 /* ==========================================================================
@@ -297,58 +461,77 @@ body {
 .todo-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 12px 4px;
+  padding: 10px 6px;
   border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  transition: background var(--transition);
-  animation: slideIn 0.18s ease forwards;
+  transition: background-color var(--transition);
+  animation: slideIn 0.16s ease forwards;
 }
 
 .todo-item:hover {
   background: var(--bg-hover);
+  border-radius: var(--radius-sm);
 }
 
 .todo-item.removing {
-  animation: slideOut 0.18s ease forwards;
+  animation: slideOut 0.16s ease forwards;
 }
 
 .todo-list .todo-item:last-child {
   border-bottom: none;
 }
 
-/* Checkbox */
+/* Interactive Task Content Wrapper (Label) */
+.todo-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+/* Accessible Checkbox Box */
 .todo-checkbox {
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-sm);
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  border-radius: 5px;
   border: 1.5px solid var(--text-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: border-color var(--transition), background var(--transition);
+  transition: border-color var(--transition), background-color var(--transition);
 }
 
 .todo-checkbox svg {
   opacity: 0;
-  transform: scale(0.5);
+  transform: scale(0.6);
   transition: opacity var(--transition), transform var(--transition);
 }
 
-.todo-item:hover .todo-checkbox {
+.todo-content:hover .todo-checkbox {
   border-color: var(--text-secondary);
 }
 
-.todo-item.completed .todo-checkbox {
+.todo-checkbox-input:checked + .todo-checkbox {
   background: var(--success);
   border-color: var(--success);
 }
 
-.todo-item.completed .todo-checkbox svg {
+.todo-checkbox-input:checked + .todo-checkbox svg {
   opacity: 1;
   transform: scale(1);
   color: #ffffff;
+}
+
+/* Keyboard Focus indicator on custom checkbox when hidden input is focused */
+.todo-checkbox-input:focus-visible + .todo-checkbox {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* Task Text */
@@ -359,6 +542,7 @@ body {
   color: var(--text-primary);
   line-height: 1.45;
   word-break: break-word;
+  overflow-wrap: anywhere;
   transition: color var(--transition);
   user-select: none;
 }
@@ -381,7 +565,7 @@ body {
   cursor: pointer;
   opacity: 0;
   flex-shrink: 0;
-  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  transition: opacity var(--transition), color var(--transition), background-color var(--transition);
 }
 
 .todo-item:hover .delete-btn,
@@ -392,7 +576,7 @@ body {
 .delete-btn:hover {
   background: var(--danger-soft);
   color: var(--danger);
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 /* ==========================================================================
@@ -400,36 +584,41 @@ body {
    ========================================================================== */
 .empty-state {
   text-align: center;
-  padding: 56px 16px;
+  padding: 48px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  animation: fadeIn 0.2s ease forwards;
 }
 
 .empty-icon {
   color: var(--text-tertiary);
   margin-bottom: 12px;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .empty-title {
-  font-size: 0.9rem;
+  font-size: 0.925rem;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   margin-bottom: 3px;
 }
 
 .empty-desc {
-  font-size: 0.82rem;
+  font-size: 0.825rem;
   color: var(--text-tertiary);
 }
 
 /* ==========================================================================
-   Clear Completed
+   Action Bar & Clear Completed
    ========================================================================== */
+.workspace-footer {
+  margin-top: 18px;
+  padding-top: 14px;
+}
+
 .clear-btn {
-  margin-top: 16px;
   background: transparent;
   border: none;
   color: var(--text-tertiary);
@@ -439,7 +628,7 @@ body {
   cursor: pointer;
   padding: 6px 10px;
   border-radius: var(--radius-sm);
-  transition: color var(--transition), background var(--transition);
+  transition: color var(--transition), background-color var(--transition);
 }
 
 .clear-btn:hover {
@@ -448,51 +637,66 @@ body {
 }
 
 /* ==========================================================================
-   Focus Indicators
+   Focus Indicators (WCAG AA Compliance)
    ========================================================================== */
 .nav-item:focus-visible,
+.theme-btn:focus-visible,
 .btn:focus-visible,
 .delete-btn:focus-visible,
-.clear-btn:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.todo-item:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
-  border-radius: var(--radius-sm);
+.clear-btn:focus-visible,
+.hint-action:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* ==========================================================================
    Animations
    ========================================================================== */
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-4px); }
+  from { opacity: 0; transform: translateY(-3px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes slideOut {
   from { opacity: 1; transform: translateX(0); }
-  to   { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 0; transform: translateX(8px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Reduced Motion Optimization */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
 
 /* ==========================================================================
-   Responsive — Tablet
+   Responsive Breakpoints
    ========================================================================== */
+
+/* Tablet (641px - 1024px) */
 @media (max-width: 1024px) {
   .sidebar {
-    width: 208px;
+    width: 204px;
+    padding: 20px 10px 14px;
   }
 
   .workspace-inner {
-    padding: 40px 32px 28px;
+    padding: 36px 24px 28px;
+  }
+
+  .theme-text {
+    display: none;
   }
 }
 
-/* ==========================================================================
-   Responsive — Mobile
-   ========================================================================== */
+/* Mobile (<= 640px) */
 @media (max-width: 640px) {
   .app-shell {
     flex-direction: column;
@@ -500,38 +704,48 @@ body {
 
   .sidebar {
     width: 100%;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     padding: 12px 16px;
     border-right: none;
     border-bottom: 1px solid var(--border);
-    gap: 14px;
+    gap: 10px;
+  }
+
+  .sidebar-top {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .sidebar-brand {
     padding: 0;
-    flex-shrink: 0;
   }
 
+  .sidebar-footer {
+    display: none; /* In compact mobile header, we embed a compact theme switch or keep it minimal */
+  }
+
+  /* Mobile compact navigation bar */
   .sidebar-nav {
     flex-direction: row;
-    gap: 4px;
-    flex: 1;
+    gap: 6px;
+    width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
   }
 
   .nav-item {
-    flex-shrink: 0;
-    padding: 6px 10px;
+    flex: 1;
+    min-width: max-content;
+    padding: 8px 12px;
     font-size: 0.8rem;
-  }
-
-  .nav-count {
-    font-size: 0.7rem;
+    min-height: 44px; /* Touch target size */
   }
 
   .workspace-inner {
-    padding: 24px 20px 20px;
+    padding: 20px 16px;
   }
 
   .page-title {
@@ -539,11 +753,34 @@ body {
   }
 
   .btn {
-    padding: 11px 14px;
+    padding: 11px 16px;
+    min-height: 44px;
   }
 
-  /* Touch devices lack hover — keep delete discoverable */
+  .todo-item {
+    padding: 10px 4px;
+  }
+
+  /* Always keep delete action discoverable on touch devices */
   .delete-btn {
-    opacity: 0.5;
+    opacity: 0.65;
+    min-width: 38px;
+    min-height: 38px;
+  }
+}
+
+/* Very Narrow Devices (<= 360px) */
+@media (max-width: 360px) {
+  .workspace-inner {
+    padding: 16px 12px;
+  }
+
+  .header-meta {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stats-text::before {
+    display: none;
   }
 }

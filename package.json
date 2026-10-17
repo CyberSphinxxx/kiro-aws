@@ -1,0 +1,18 @@
+{
+  "name": "taskmaster",
+  "version": "1.0.0",
+  "description": "Production-quality, accessible, and persistent To-Do application built with vanilla web standards.",
+  "scripts": {
+    "start": "npx serve -p 3000 .",
+    "test": "node --test test/app.test.js"
+  },
+  "keywords": [
+    "todo",
+    "vanilla-js",
+    "spec-driven-development",
+    "accessible",
+    "dark-mode"
+  ],
+  "author": "",
+  "license": "MIT"
+}
