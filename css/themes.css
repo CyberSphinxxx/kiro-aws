@@ -1,0 +1,91 @@
+/* ==========================================================================
+   Theme System
+   Semantic surface, text, border, and state color tokens
+   ========================================================================== */
+
+/* Dark Theme (Default) */
+:root,
+:root[data-theme="dark"] {
+  --theme-name: "dark";
+
+  /* Surfaces */
+  --bg-app: #0e1116;
+  --bg-sidebar: #131720;
+  --bg-card: #151b26;
+  --bg-input: #1a1f2a;
+  --bg-input-focus: #1d232f;
+  --bg-hover: rgba(255, 255, 255, 0.04);
+  --bg-active: rgba(99, 102, 241, 0.12);
+  --bg-hint: rgba(99, 102, 241, 0.08);
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  /* Typography */
+  --text-primary: #e6edf3;
+  --text-secondary: #9ba3af;
+  --text-tertiary: #6b7280;
+  --text-strike: #535c6a;
+
+  /* Accent & Action */
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+  --accent-border: rgba(99, 102, 241, 0.40);
+
+  /* Feedback Colors */
+  --success: #10b981;
+  --success-soft: rgba(16, 185, 129, 0.12);
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-soft: rgba(239, 68, 68, 0.10);
+
+  /* Focus Indicator */
+  --focus-ring: 2px solid #818cf8;
+  --focus-offset: 2px;
+}
+
+/* Light Theme */
+:root[data-theme="light"] {
+  --theme-name: "light";
+
+  /* Surfaces */
+  --bg-app: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #ffffff;
+  --bg-input-focus: #ffffff;
+  --bg-hover: rgba(0, 0, 0, 0.035);
+  --bg-active: rgba(79, 70, 229, 0.08);
+  --bg-hint: rgba(79, 70, 229, 0.06);
+
+  /* Borders */
+  --border-subtle: #f1f5f9;
+  --border-default: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Typography */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #64748b;
+  --text-strike: #94a3b8;
+
+  /* Accent & Action */
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-soft: rgba(79, 70, 229, 0.08);
+  --accent-border: rgba(79, 70, 229, 0.45);
+
+  /* Feedback Colors */
+  --success: #059669;
+  --success-soft: rgba(5, 150, 105, 0.10);
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --danger-soft: rgba(220, 38, 38, 0.08);
+
+  /* Focus Indicator */
+  --focus-ring: 2px solid #4f46e5;
+  --focus-offset: 2px;
+}

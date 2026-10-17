@@ -1,6 +1,6 @@
 # TaskMaster • Production-Quality Spec-Driven To-Do App
 
-TaskMaster is a fast, accessible, responsive, and persistent task management application built using pure vanilla web standards (HTML5, CSS3, ES6+ JavaScript) without heavy external dependencies.
+TaskMaster is a fast, accessible, responsive, and persistent task management application built using pure modular vanilla web standards (HTML5, CSS3, ES6+ JavaScript) without heavy external dependencies or bundlers.
 
 ---
 
@@ -12,43 +12,59 @@ TaskMaster is a fast, accessible, responsive, and persistent task management app
   - Non-conflicting event delegation: clicking task text or checkbox toggles completion; delete button operates as an independent sibling control.
   - Visible keyboard focus rings (`:focus-visible`) meeting WCAG AA requirements.
   - Screen reader announcements via `aria-live="polite"` and accessible ARIA attributes.
-- **Adaptive Theming**:
+- **Dedicated Theme System (`js/theme.js` & `css/themes.css`)**:
   - Light mode, Dark mode, and System (auto-detection via `prefers-color-scheme`).
-  - Saved theme preference in `localStorage`.
-  - Dynamically responds to OS theme changes.
+  - Persistent preference in `localStorage`.
+  - Dynamically responds to OS theme changes in real time.
 - **Context-Aware Views**:
   - Filter by **All Tasks**, **Active**, and **Completed**.
   - Dynamic empty-state messaging tailored to each active view.
   - Non-disruptive feedback banner when a task is added while viewing Completed tasks, with quick navigation to Active tasks.
-- **Resilient Persistence**:
+- **Resilient Persistence (`js/storage.js`)**:
   - Automatic synchronization with `localStorage` (`kiro_todos_v1`).
   - Graceful sanitization of corrupted or legacy data format.
-- **Responsive Layout**:
+- **Responsive Layout (`css/responsive.css`)**:
   - **Desktop (>1024px)**: Persistent sidebar navigation, 720px optimized line-length workspace.
   - **Tablet (641px - 1024px)**: Streamlined sidebar and comfortable padding.
-  - **Mobile (<=640px)**: Compact mobile header with brand and touch-friendly navigation tabs (>= 44px touch targets), tested across 320px–1920px viewports.
+  - **Mobile (<=640px)**: Compact mobile header with touch-friendly navigation tabs (>= 44px touch targets), tested across 320px–1920px viewports.
   - Zero horizontal overflow.
 - **Reduced Motion Support**:
   - Respects `@media (prefers-reduced-motion: reduce)` by bypassing animations.
 
 ---
 
-## 📁 Project Structure
+## 📁 Modular Project Structure
 
 ```text
 kiro-aws/
+├── css/
+│   ├── tokens.css            # Base typography, radii, transitions, & touch targets
+│   ├── themes.css            # Theme System tokens for Dark & Light modes
+│   ├── base.css              # Reset, font smoothing, & .sr-only accessibility
+│   ├── layout.css            # Shell, sidebar, workspace, & header structures
+│   ├── components.css        # Form, todo item, checkbox, delete button, empty state
+│   └── responsive.css        # Media queries (Tablet, Mobile, Ultra-narrow, Reduced motion)
+├── js/
+│   ├── storage.js            # Persistence, serialization, & error recovery
+│   ├── theme.js              # Theme engine (Light, Dark, System OS queries)
+│   ├── state.js              # Pure task state mutations & validation
+│   ├── ui.js                 # DOM rendering, templates, escaping, & banner
+│   └── app.js                # Application entry point & event orchestrator
+├── test/
+│   ├── state.test.js         # Pure state unit tests
+│   ├── storage.test.js       # Persistence & sanitization tests
+│   ├── theme.test.js         # Theme system unit tests
+│   └── app.test.js           # Integration & regression tests
 ├── .kiro/
 │   └── specs/
 │       ├── requirements.md   # User stories & acceptance criteria
 │       ├── design.md         # Technical architecture & design specifications
 │       └── tasks.md          # Implementation checklist & milestones
-├── test/
-│   └── app.test.js           # Automated regression tests (Node test runner)
-├── index.html                # Semantic HTML layout & accessibility tree
-├── style.css                 # Design tokens, Light/Dark themes, responsive CSS
-├── app.js                    # Modular Core logic & browser controller
+├── index.html                # Semantic HTML layout loading modular scripts & styles
+├── style.css                 # Clean CSS manifest importing css/*.css modules
+├── app.js                    # Legacy facade re-exporting modular JS subsystems
 ├── package.json              # NPM scripts for development & testing
-├── .editorconfig             # Consistent formatting configuration
+├── .editorconfig             # Code style & formatting rules
 └── README.md                 # Project documentation
 ```
 
@@ -76,68 +92,20 @@ TaskMaster includes an automated test suite executed via Node.js's built-in test
 npm test
 ```
 
-### What the test suite covers:
-1. **Core Operations**: Task creation, unique ID generation, text validation, empty/whitespace rejection, 200-char limits, toggle operations, deletions, clear completed.
-2. **Filtering & Statistics**: Partitioning by All, Active, Completed, accurate counts calculation, filter-specific empty state trigger conditions.
-3. **Data Sanitization & Persistence**: Valid JSON deserialization, malformed JSON recovery, legacy format normalization, null/invalid item filtering.
-4. **Theming Logic**: OS dark-mode preference resolution to theme tokens.
-5. **Simulated Workflow**: End-to-end task lifecycle (add, complete, filter, delete, clear, persist, restore).
+Watch mode for rapid development:
+```bash
+npm run test:watch
+```
 
 ---
 
 ## 🧩 Module Responsibilities
 
-The codebase follows a clean separation of concerns:
+The codebase follows strict single-responsibility separation of concerns:
 
-- **`index.html`**:
-  - Provides semantic structure (`<aside>`, `<main>`, `<nav>`, `<header>`, `<ul>`, `<li>`).
-  - Sets up the accessibility tree (`role="tablist"`, `role="tab"`, `role="radiogroup"`, `aria-live="polite"`).
-  - Includes a visually-hidden `.sr-only` input label and alert containers.
-
-- **`style.css`**:
-  - **CSS Custom Properties**: Curated palette for `:root[data-theme="dark"]` and `:root[data-theme="light"]`.
-  - **Layout & Typography**: Fluid layout, Inter font, optimal readability width, tabular numerals for counters.
-  - **Responsive Breakpoints**: Breakpoints at 1024px, 640px, and 360px ensuring seamless behavior from 320px up to 1920px+.
-
-- **`app.js`**:
-  - **`Core`**: Pure, deterministic utility functions for state mutations (`validateText`, `createItem`, `toggleItem`, `deleteItem`, `clearCompleted`, `filterList`, `getCounts`, `sanitizeStorageData`, `resolveSystemTheme`). Completely decoupled from DOM for instant unit testing.
-  - **`initApp`**: Browser controller handling DOM queries, theme listeners, event delegation, and reactive rendering.
-  - **Universal Export**: Compatible with both direct browser execution and Node.js CommonJS test environments.
-
----
-
-## 🎨 Theme Customization
-
-Themes are controlled via CSS custom properties on the `<html>` element using the `data-theme` attribute:
-
-```css
-:root[data-theme="dark"] {
-  --bg-app: #0e1116;
-  --bg-sidebar: #131720;
-  --text-primary: #e6edf3;
-  --accent: #6366f1;
-}
-
-:root[data-theme="light"] {
-  --bg-app: #f8fafc;
-  --bg-sidebar: #ffffff;
-  --text-primary: #0f172a;
-  --accent: #4f46e5;
-}
-```
-
-To add custom branding or tokens, modify the CSS variables in [`style.css`](style.css).
-
----
-
-## 🚀 Future Extension Guidelines
-
-If extending TaskMaster in the future:
-1. **Adding Task Metadata** (e.g. Due Dates, Priority):
-   - Update `Core.createItem` to accept optional `priority` or `dueDate`.
-   - Update `Core.sanitizeStorageData` to validate the new properties while preserving backward compatibility.
-2. **Search / Filter Query**:
-   - Add a search input in the workspace header.
-   - Extend `Core.filterList` with a `searchQuery` filter condition.
-3. **Drag & Drop Reordering**:
-   - Leverage native HTML5 Drag and Drop API (`draggable="true"` on `.todo-item`) and persist order indices.
+- **`js/storage.js`**: Persistence layer. Manages `localStorage`, fallback defaults, and sanitizes corrupted records into safe, typed objects.
+- **`js/theme.js`**: Theme engine. Controls active color mode (`light`, `dark`, `system`), monitors OS `prefers-color-scheme` changes, and dispatches change events to subscribers.
+- **`js/state.js`**: Pure business logic. Contains validation, task creation, toggle, deletion, filtering, and stats calculations with 100% pure functions.
+- **`js/ui.js`**: View and DOM rendering. Manages templates, HTML sanitization, badge counts, dynamic empty states, and banner notifications.
+- **`js/app.js`**: Main orchestrator. Glues modules together, sets up delegated DOM event listeners, and synchronizes application lifecycle.
+- **`css/`**: Segmented stylesheets ensuring no monolith file exceeds ~120 lines, fully modularized by concern.

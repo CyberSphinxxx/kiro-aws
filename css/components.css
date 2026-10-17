@@ -1,0 +1,304 @@
+/* ==========================================================================
+   Component Styles
+   ========================================================================== */
+
+/* Task Form */
+.todo-form {
+  margin-bottom: 16px;
+}
+
+.input-group {
+  display: flex;
+  gap: 8px;
+}
+
+.todo-input {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 11px 14px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  outline: none;
+}
+
+.todo-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.todo-input:focus {
+  border-color: var(--accent-border);
+  background: var(--bg-input-focus);
+}
+
+.form-error {
+  margin-top: 6px;
+  font-size: var(--font-size-xs);
+  color: var(--danger);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 11px 18px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-icon {
+  flex-shrink: 0;
+}
+
+/* Filter Context Hint */
+.filter-hint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-hint);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  margin-bottom: 16px;
+  font-size: 0.825rem;
+  color: var(--text-secondary);
+  animation: fadeIn var(--transition-normal);
+}
+
+.hint-action {
+  background: transparent;
+  border: none;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 2px 4px;
+  border-radius: var(--radius-xs);
+}
+
+.hint-action:hover {
+  color: var(--accent-hover);
+}
+
+/* Task List */
+.list-section {
+  min-height: 120px;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background-color var(--transition-fast);
+  animation: slideIn var(--transition-fast);
+}
+
+.todo-item:hover {
+  background: var(--bg-hover);
+  border-radius: var(--radius-sm);
+}
+
+.todo-item.removing {
+  animation: slideOut var(--transition-fast);
+}
+
+.todo-list .todo-item:last-child {
+  border-bottom: none;
+}
+
+/* Accessible Checkbox Pattern */
+.todo-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.todo-checkbox {
+  width: 19px;
+  height: 19px;
+  margin-top: 1px;
+  border-radius: 5px;
+  border: 1.5px solid var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.todo-checkbox svg {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.todo-content:hover .todo-checkbox {
+  border-color: var(--text-secondary);
+}
+
+.todo-checkbox-input:checked + .todo-checkbox {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+.todo-checkbox-input:checked + .todo-checkbox svg {
+  opacity: 1;
+  transform: scale(1);
+  color: #ffffff;
+}
+
+.todo-checkbox-input:focus-visible + .todo-checkbox {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* Task Text */
+.todo-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  line-height: 1.45;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  transition: color var(--transition-fast);
+  user-select: none;
+}
+
+.todo-item.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--text-strike);
+}
+
+/* Delete Button */
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.todo-item:hover .delete-btn,
+.todo-item:focus-within .delete-btn {
+  opacity: 0.65;
+}
+
+.delete-btn:hover {
+  background: var(--danger-soft);
+  color: var(--danger);
+  opacity: 1 !important;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn var(--transition-normal);
+}
+
+.empty-icon {
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+.empty-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.empty-desc {
+  font-size: 0.825rem;
+  color: var(--text-tertiary);
+}
+
+/* Clear Completed Button */
+.clear-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.clear-btn:hover {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* Keyframe Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(8px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
