@@ -18,6 +18,22 @@
   const filterButtons = document.querySelectorAll('.filter-btn');
   const clearCompletedBtn = document.getElementById('clear-completed-btn');
 
+  // Sidebar count badges
+  const countAll = document.getElementById('count-all');
+  const countActive = document.getElementById('count-active');
+  const countCompleted = document.getElementById('count-completed');
+
+  // Page header elements
+  const pageTitle = document.getElementById('page-title');
+  const pageSubtitle = document.getElementById('page-subtitle');
+
+  // Filter display metadata for the page header
+  const filterMeta = {
+    all: { title: 'All Tasks', subtitle: 'Everything on your list.' },
+    active: { title: 'Active', subtitle: 'Tasks that still need your attention.' },
+    completed: { title: 'Completed', subtitle: 'Tasks you have finished.' }
+  };
+
   // Application State
   let todos = [];
   let currentFilter = 'all';
@@ -161,6 +177,15 @@
 
     // Toggle clear completed button visibility
     clearCompletedBtn.style.display = completedCount > 0 ? 'inline-block' : 'none';
+
+    // Update sidebar navigation counts
+    if (countAll) countAll.textContent = todos.length;
+    if (countActive) countActive.textContent = activeCount;
+    if (countCompleted) countCompleted.textContent = completedCount;
+
+    // Update page header title and subtitle for current filter
+    if (pageTitle) pageTitle.textContent = filterMeta[currentFilter].title;
+    if (pageSubtitle) pageSubtitle.textContent = filterMeta[currentFilter].subtitle;
 
     // Handle Empty State
     if (filtered.length === 0) {
